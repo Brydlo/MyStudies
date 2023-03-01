@@ -1,33 +1,7 @@
-                                    // in my opinion the best solution and the simplest one!!!
+                                   
 package Cinema;
 
 import java.util.*;
-/*
-public class Cinema {
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the number of rows:");
-        byte rows = scanner.nextByte();
-        System.out.println("Enter the number of seats in each row:");
-        byte seats = scanner.nextByte();
-
-        int ticketPrice;
-        int totalSeats = rows * seats;
-        int front = rows / 2;
-        int back = rows - (rows / 2);
-
-        if (totalSeats < 60) {
-            ticketPrice = 10 * totalSeats;
-        } else {
-            ticketPrice = (front * seats * 10) + (back * seats * 8);
-        }
-        System.out.println("Total income: $" + income);
-    }
-
-
-}*/
-
 
 public class Cinema {
     static Scanner sc = new Scanner(System.in);
