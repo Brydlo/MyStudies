@@ -1,1 +1,120 @@
-a program that counts the number of words, syllables, etc. in a sentence by using regular expressions
+//a simple program that counts the number of words, syllables, etc. in a sentence by using regular expressions
+// Hyperskill wanted to read text from file.
+// to check for errors in my IntelliJ, I put some of the code in comments
+
+import java.io.*;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Regexes {
+    public static void main(String[] args) throws IOException {
+        Scanner s = new Scanner(System.in);
+//        String filename = args[0];
+        String[] vowels;
+        BufferedReader reader = null;
+        String readingLine = null;
+        int numberOfSentence = 0;
+        int numberOfWords = 0;
+        int character = 0;
+        int numberOfSyllables = 0;
+        int numberOfPolysyllables = 0;
+        double score = 0;
+//        try {
+//            reader = new BufferedReader(new FileReader(filename));
+            readingLine = s.nextLine();//reader.readLine();
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+        try {
+            numberOfSentence = readingLine.split("[!.?]").length;
+//            numberOfSentence += sentences.length;
+            numberOfWords = readingLine.split("\\s+").length;
+//            numberOfWords += words.length;
+            String withoutSpaces = readingLine.replace(" ", "");
+            character = withoutSpaces.split("").length;
+//            character = chars.length;
+            numberOfSyllables = readingLine.split("[aeiouy]+[^$e(,.:;!?)]").length;
+            numberOfPolysyllables = readingLine.split("([aeiouy]+[^$e(,.:;!?)]){3,}").length;
+//            for (int i = 0; i < words.length; i++) {
+//                int count = 0;
+//                words[i] = words[i].toLowerCase();
+//                words[i] = words[i].replaceAll("e\\b", "")
+//                        .replaceAll("you", "a")
+//                        .replaceAll("[aeiouy]{2}", "a")
+//                        .replaceAll(" th "," a ")
+//                        .replaceAll(",","")
+//                        .replaceAll(" w "," a ")
+//                        .replaceAll("[0-9]+", "a")
+//                        .replaceAll("[^aeiouy]", "");
+//                vowels = words[i].split("");
+//                count += vowels.length;
+//                numberOfSyllables = count >= 2 ? numberOfSyllables + count : numberOfSyllables + 1;
+//                if (count > 2) {
+//                    numberOfPolysyllables++;
+//                }
+//            }
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+        }
+        double automatedReadabilityIndex = 4.71 * character / numberOfWords + 0.5 * numberOfWords / numberOfSentence - 21.43;
+        int ageARI = switchStatement(automatedReadabilityIndex);
+        double fleschKincaidReadabilityTests = 0.39 * numberOfWords / numberOfSentence + 11.8 * numberOfSyllables / numberOfWords - 15.59;
+        int ageFleschKincaid = switchStatement(fleschKincaidReadabilityTests);
+        double simpleMeasureOfGobbledygook = 1.043 * Math.sqrt(numberOfPolysyllables * (double) 30 / numberOfSentence) + 3.1291;
+        int ageSMOG = switchStatement(simpleMeasureOfGobbledygook);
+        double averageCharacter = ((double) character / numberOfWords) * 100.0;
+        double averageSentence = ((double) numberOfSentence / numberOfWords) * 100.0;
+        double colemanLiauIndex = 0.0588 * averageCharacter - 0.296 * averageSentence - 15.8;
+        int ageColemanLiau = switchStatement(colemanLiauIndex);
+
+        double averageAge = (ageARI + ageFleschKincaid + ageSMOG + ageColemanLiau) / 4.0;
+
+        System.out.printf("Words: %d%n" +
+                "Sentences: %d%n" +
+                "Characters: %d%n" +
+                "Syllables: %d%n" +
+                "Polysyllables: %d%n", numberOfWords, numberOfSentence, character, numberOfSyllables, numberOfPolysyllables);
+
+        System.out.println("Enter the score you want to calculate (ARI, FK, SMOG, CL, all):");
+        switch (s.nextLine()) {
+            case "ARI" -> System.out.printf("Automated Readability Index: %.2f (about %d-year-olds).", automatedReadabilityIndex, ageARI);
+            case "FK" -> System.out.printf("Flesch–Kincaid readability tests: %.2f (about %d-year-olds).", fleschKincaidReadabilityTests, ageFleschKincaid);
+            case "SMOG" -> System.out.printf("Simple Measure of Gobbledygook: %.2f (about %d-year-olds).", simpleMeasureOfGobbledygook, ageSMOG);
+            case "CL" -> System.out.printf("Coleman–Liau index: %.2f (about %d-year-olds).", colemanLiauIndex, ageColemanLiau);
+            case "all" -> {
+                System.out.printf("Automated Readability Index: %.2f (about %d-year-olds).%n" +
+                                "Flesch–Kincaid readability tests: %.2f (about %d-year-olds).%n" +
+                                "Simple Measure of Gobbledygook: %.2f (about %d-year-olds).%n" +
+                                "Coleman–Liau index: %.2f (about %d-year-olds).%n", automatedReadabilityIndex, switchStatement(automatedReadabilityIndex),
+                        fleschKincaidReadabilityTests, switchStatement(fleschKincaidReadabilityTests),
+                        simpleMeasureOfGobbledygook, switchStatement(simpleMeasureOfGobbledygook),
+                        colemanLiauIndex, switchStatement(colemanLiauIndex));
+                System.out.printf("This text should be understood in average by %.2f-year-olds.", averageAge);
+            }
+            default -> System.out.println("wrong statement");
+        }
+    }
+    static int switchStatement(double value) {
+        int scoreAsCeil = (int) Math.ceil(value);
+        int age = 0;
+        switch (scoreAsCeil) {
+            case 1 -> age = 6;
+            case 2 -> age = 7;
+            case 3 -> age = 8;
+            case 4 -> age = 9;
+            case 5 -> age = 10;
+            case 6 -> age = 11;
+            case 7 -> age = 12;
+            case 8 -> age = 13;
+            case 9 -> age = 14;
+            case 10 -> age = 15;
+            case 11 -> age = 16;
+            case 12 -> age = 17;
+            case 13 -> age = 18;
+            case 14 -> age = 22;
+        }
+        return age;
+    }
+}
